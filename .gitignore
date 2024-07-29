@@ -1,0 +1,15 @@
+*.csv
+
+*.json
+
+*.log
+
+*.npy
+
+*.npz
+
+*.safetensors
+
+*.png
+
+*.html

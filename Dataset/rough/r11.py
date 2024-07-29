@@ -1,0 +1,70 @@
+import torch
+import esm
+import numpy as np
+import time
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+## load esm1b model
+
+model, alphabet = esm.pretrained.esm1b_t33_650M_UR50S()
+batch_converter = alphabet.get_batch_converter()
+
+
+data = [
+    ("label1", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label2", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label3", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label4", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label5", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label6", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label7", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label8", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label9", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label10", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label11", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label12", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label13", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label14", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label15", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label16", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label17", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label18", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label19", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label20", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label21", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label22", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label23", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label24", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL"),
+    ("label25", "MKTFFVQHLLGSALASTANPLSLRLCNLRAPSRQFQVAIMFSVFYLLLYLGTLLLFLFRRLFGFSL")
+]
+new_data = []
+for j in range(50):
+    for i in range(len(data)):
+        new_data.append(data[i])
+
+data = new_data
+print(f"Length of data: {len(data)}")
+## start time
+start = time.time()
+
+batch_labels, batch_strs, batch_tokens = batch_converter(data)
+# Move the input data to the GPU if available
+batch_tokens = batch_tokens.to(device)
+
+# Encode the sequences
+with torch.no_grad():
+    results = model(batch_tokens.to(device), repr_layers=[33], return_contacts=False)
+
+
+# Extract the embeddings
+token_representations = results["representations"][33].cpu().numpy()
+# print(token_embeddings.shape)  # This should give you (num_sequences, sequence_length, embedding_dim)
+# return token_embeddings
+protein_representations = np.mean(token_representations[:, 1:-1, :], axis=1)
+print(f"shape of the protein_representations: {protein_representations.shape}")
+print(protein_representations)
+
+## end time
+end = time.time()
+print(f"Time taken: {end-start}")

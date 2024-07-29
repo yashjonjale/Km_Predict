@@ -1,0 +1,16 @@
+This is when threshold was 0.3, no ww pairs at all! meaning 0.9 threshold essentially
+
+
+100%|██████████| 50/50.0 [25:42<00:00, 30.84s/trial, best loss: 328.38507996781243]
+Best parameters found by Hyperopt:
+{'learning_rate': 0.21168726818762412, 'max_delta_step': 2.1723864403385704, 'max_depth': 8.0, 'min_child_weight': 8.728327139764927, 'num_rounds': 167.56525385581372, 'reg_alpha': 2.7900326662131154, 'reg_lambda': 0.17377739885122256}
+2024-07-13 14:24:31,946 - my_logger - INFO - Best parameters found by Hyperopt:
+2024-07-13 14:24:31,947 - my_logger - INFO - {'learning_rate': 0.21168726818762412, 'max_delta_step': 2.1723864403385704, 'max_depth': 8.0, 'min_child_weight': 8.728327139764927, 'num_rounds': 167.56525385581372, 'reg_alpha': 2.7900326662131154, 'reg_lambda': 0.17377739885122256}
+Evals: 50.0
+2024-07-13 14:24:37,440 - my_logger - INFO - Evals: 50.0
+Test Accuracy: 0.24
+2024-07-13 14:24:37,469 - my_logger - INFO - Test Accuracy: 0.24
+Train Accuracy: 0.62
+2024-07-13 14:24:37,560 - my_logger - INFO - Train Accuracy: 0.62
+Validation Accuracy: 0.06
+2024-07-13 14:24:37,560 - my_logger - INFO - Validation Accuracy: 0.06
